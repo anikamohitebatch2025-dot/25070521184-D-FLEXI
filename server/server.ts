@@ -112,10 +112,23 @@ async function startServer() {
   });
 
   // 8. Start HTTP listener
-  app.listen(PORT, '0.0.0.0', () => {
+  const server = app.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 FLEXI Backend Server running on http://localhost:${PORT}`);
     console.log(`📡 Health Check endpoint: http://localhost:${PORT}/api/health`);
     console.log(`🌐 Ready to serve requests from Vite React Client`);
+  });
+
+  server.on('error', (err: any) => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(`\n❌ ERROR: Port ${PORT} is already in use (EADDRINUSE)!`);
+      console.error(`   👉 On macOS: macOS AirPlay Receiver uses port 5000 by default.`);
+      console.error(`      To disable it: System Settings > General > AirDrop & AirPlay > Turn OFF "AirPlay Receiver".`);
+      console.error(`      OR free the port via terminal: lsof -ti :${PORT} | xargs kill -9`);
+      console.error(`   👉 On Windows/Linux: Another node process is already running on port ${PORT}.\n`);
+      process.exit(1);
+    } else {
+      console.error('Server error:', err);
+    }
   });
 }
 

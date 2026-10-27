@@ -90,6 +90,16 @@
       "role": "member",
       "createdAt": "2026-10-27T13:44:41.439Z",
       "updatedAt": "2026-10-27T13:44:41.439Z"
+    },
+    {
+      "_id": "6ae0c96ecfc020238d04fd7d",
+      "name": "Test Athlete",
+      "email": "testathlete_1793116526084@example.com",
+      "password": "$2a$10$SkiOY7y4m2dhRrZUD2IwR.Nu7ipydFU25z2ZY4QJ2AnWktmKUofUS",
+      "phone": "+1 555-0199",
+      "role": "member",
+      "createdAt": "2026-10-27T15:55:26.907Z",
+      "updatedAt": "2026-10-27T15:55:26.907Z"
     }
   ],
   "plans": [
@@ -403,6 +413,17 @@
       "status": "pending",
       "createdAt": "2026-10-27T13:44:41.937Z",
       "updatedAt": "2026-10-27T13:44:41.937Z"
+    },
+    {
+      "_id": "6ae0c970b5972d66cedecf8c",
+      "name": "Prospect Member",
+      "email": "prospect@gym.com",
+      "phone": "555-1234",
+      "subject": "Trial Pass",
+      "message": "Interested in a trial week.",
+      "status": "pending",
+      "createdAt": "2026-10-27T15:55:28.961Z",
+      "updatedAt": "2026-10-27T15:55:28.961Z"
     }
   ],
   "appointments": [
@@ -487,6 +508,21 @@
       "status": "confirmed",
       "createdAt": "2026-10-27T14:50:20.249Z",
       "updatedAt": "2026-10-27T14:50:20.249Z"
+    },
+    {
+      "_id": "6ae0c970cdf7e3a468a93960",
+      "memberName": "Test Athlete",
+      "memberEmail": "testathlete_1793116526084@example.com",
+      "memberPhone": "555-0199",
+      "service": "1-on-1 Fitness Assessment",
+      "trainerName": "Any Available Coach",
+      "date": "2026-12-21",
+      "timeSlot": "09:00 AM",
+      "duration": 60,
+      "notes": "",
+      "status": "confirmed",
+      "createdAt": "2026-10-27T15:55:28.984Z",
+      "updatedAt": "2026-10-27T15:55:28.984Z"
     }
   ],
   "attendance": [
@@ -922,7 +958,10 @@
       "transactionId": "TXN-CRT-501965",
       "invoiceNumber": "INV-FLX-556117",
       "paidAt": "2026-10-27T08:18:29.251Z",
-      "createdAt": "2026-10-27T08:18:29.251Z"
+      "createdAt": "2026-10-27T08:18:29.251Z",
+      "memberName": "John Miller",
+      "memberEmail": "john@example.com",
+      "invoiceDate": "2026-10-27"
     },
     {
       "_id": "6ae05e55969add247784e8c4",
@@ -936,7 +975,10 @@
       "transactionId": "TXN-FLX-380009",
       "invoiceNumber": "INV-785700",
       "paidAt": "2026-10-27T08:18:29.240Z",
-      "createdAt": "2026-10-27T08:18:29.240Z"
+      "createdAt": "2026-10-27T08:18:29.240Z",
+      "memberName": "John Miller",
+      "memberEmail": "john@example.com",
+      "invoiceDate": "2026-10-27"
     },
     {
       "_id": "6ae05e551e4207444adc5c20",
@@ -950,7 +992,10 @@
       "transactionId": "TXN-UPG-141426",
       "invoiceNumber": "INV-UPG-382113",
       "paidAt": "2026-10-27T08:18:29.049Z",
-      "createdAt": "2026-10-27T08:18:29.049Z"
+      "createdAt": "2026-10-27T08:18:29.049Z",
+      "memberName": "John Miller",
+      "memberEmail": "john@example.com",
+      "invoiceDate": "2026-10-27"
     },
     {
       "_id": "65d1pay00000000000000001",
