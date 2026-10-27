@@ -4,7 +4,10 @@
   "type": "module",
   "scripts": {
     "start": "node server.ts",
-    "dev": "tsx server.ts"
+    "dev": "tsx server.ts",
+    "seed": "tsx src/seed.ts",
+    "test:db": "tsx src/testDb.ts",
+    "test:all": "tsx src/testRunner.ts"
   },
   "dependencies": {
     "@google/genai": "^2.31.0",
@@ -13,7 +16,8 @@
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^4.21.2",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.10.1"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",

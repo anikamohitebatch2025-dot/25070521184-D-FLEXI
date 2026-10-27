@@ -28,13 +28,20 @@ export const Login: React.FC = () => {
 
     if (result.success) {
       success(result.message || 'Signed in successfully!');
+      const role = result.user?.role;
       if (redirectPath) {
-        navigate(redirectPath);
+        // Prevent bouncing if user role does not match privileged redirect
+        if (redirectPath.startsWith('/admin') && role !== 'admin') {
+          navigate('/dashboard');
+        } else if (redirectPath.startsWith('/trainer') && role !== 'trainer' && role !== 'admin') {
+          navigate('/dashboard');
+        } else {
+          navigate(redirectPath);
+        }
       } else {
-        // Will route to admin, trainer or member dashboard based on role
-        if (email.toLowerCase().includes('admin')) {
+        if (role === 'admin') {
           navigate('/admin');
-        } else if (email.toLowerCase().includes('marcus') || email.toLowerCase().includes('trainer')) {
+        } else if (role === 'trainer') {
           navigate('/trainer');
         } else {
           navigate('/dashboard');

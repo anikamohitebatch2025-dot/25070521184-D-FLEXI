@@ -400,6 +400,15 @@ export const MemberDashboard: React.FC = () => {
   const isExpired = activeMembership?.computedStatus === 'Expired';
   const daysRemaining = activeMembership ? Math.max(0, Math.ceil((new Date(activeMembership.endDate).getTime() - Date.now()) / 86400000)) : 0;
 
+  // Guard: show spinner while auth context or data is loading
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-[#0b0b0c] flex items-center justify-center text-[#ff6a00] font-bold text-xl">
+        Loading your dashboard...
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#0b0b0c] text-white py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto space-y-6">
@@ -424,7 +433,7 @@ export const MemberDashboard: React.FC = () => {
                 </span>
               </div>
               <p className="text-xs text-neutral-400 mt-1 flex items-center gap-3">
-                <span>Member ID: FLX-{user?._id.substring(0, 8).toUpperCase()}</span>
+                <span>Member ID: FLX-{(user?._id ?? '').substring(0, 8).toUpperCase()}</span>
                 <span>•</span>
                 <span className="text-[#ff6a00] font-semibold">{activeMembership?.plan?.name || 'Quarterly Pro'}</span>
               </p>
@@ -435,7 +444,7 @@ export const MemberDashboard: React.FC = () => {
           <div className="flex items-center gap-2.5 flex-wrap">
             <button
               onClick={() => setQrModalOpen(true)}
-              className="px-4 py-2.5 rounded-xl bg-[#ff6a00] hover:bg-[#e05500] text-white text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-[#ff6a00]/25 transition-all"
+              className="px-4 py-2.5 rounded-xl bg-[#ff6a00] hover:bg-[#e05500] text-white text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-[#ff6a00]/25 transition-all cursor-pointer"
             >
               <QrCode className="w-4 h-4" />
               Digital QR Pass
@@ -446,6 +455,13 @@ export const MemberDashboard: React.FC = () => {
             >
               <Calendar className="w-4 h-4 text-[#ff6a00]" />
               Book Session
+            </Link>
+            <Link
+              to="/plans"
+              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500/20 to-orange-500/20 hover:from-amber-500/30 hover:to-orange-500/30 text-amber-300 text-xs font-bold uppercase tracking-wider flex items-center gap-2 border border-amber-500/30 transition-colors"
+            >
+              <TrendingUp className="w-4 h-4 text-amber-400" />
+              Upgrade Plan
             </Link>
           </div>
         </div>
@@ -471,7 +487,7 @@ export const MemberDashboard: React.FC = () => {
               Renew Membership
             </Link>
           </div>
-        ) : daysRemaining <= 7 && (
+        ) : activeMembership && daysRemaining <= 7 && (
           <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-300 flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <AlertTriangle className="w-5 h-5 text-amber-400" />

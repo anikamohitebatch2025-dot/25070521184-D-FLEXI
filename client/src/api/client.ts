@@ -9,11 +9,22 @@ const api = axios.create({
   },
 });
 
-// Interceptor to attach token from localStorage if present (for seamless client fallback)
+// Automatically initialize Authorization header from localStorage on boot
+const initialToken = typeof window !== 'undefined' ? localStorage.getItem('flexi_token') : null;
+if (initialToken) {
+  api.defaults.headers.common['Authorization'] = `Bearer ${initialToken}`;
+}
+
+// Interceptor to attach token from localStorage on every request
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('flexi_token');
-  if (token && !config.headers.Authorization) {
-    config.headers.Authorization = `Bearer ${token}`;
+  const token = typeof window !== 'undefined' ? localStorage.getItem('flexi_token') : null;
+  if (token) {
+    if (config.headers && typeof config.headers.set === 'function') {
+      config.headers.set('Authorization', `Bearer ${token}`);
+    } else {
+      config.headers = config.headers || {};
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
   }
   return config;
 });
@@ -22,10 +33,6 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Check if unauthorized and session expired
-    if (error.response?.status === 401 && !window.location.pathname.includes('/login')) {
-      // Allow auth context to handle logout
-    }
     return Promise.reject(error);
   }
 );

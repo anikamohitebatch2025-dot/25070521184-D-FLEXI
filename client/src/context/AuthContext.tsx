@@ -30,7 +30,7 @@ interface AuthContextType {
   user: User | null;
   activeMembership: ActiveMembership | null;
   loading: boolean;
-  login: (email: string, password: string) => Promise<{ success: boolean; message?: string }>;
+  login: (email: string, password: string) => Promise<{ success: boolean; message?: string; user?: User }>;
   register: (name: string, email: string, password: string, phone?: string) => Promise<{ success: boolean; message?: string }>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
@@ -47,7 +47,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState<boolean>(true);
 
   const fetchCurrentUser = async () => {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('flexi_token') : null;
+    if (!token) {
+      setUser(null);
+      setActiveMembership(null);
+      setLoading(false);
+      return;
+    }
+
     try {
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       const res = await api.get('/auth/me');
       if (res.data?.success && res.data?.data) {
         setUser(res.data.data.user);
@@ -56,10 +65,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUser(null);
         setActiveMembership(null);
       }
-    } catch {
-      setUser(null);
-      setActiveMembership(null);
-      localStorage.removeItem('flexi_token');
+    } catch (err: any) {
+      console.warn('Session verification notice:', err.response?.data?.message || err.message);
+      if (err.response?.status === 401) {
+        setUser(null);
+        setActiveMembership(null);
+        localStorage.removeItem('flexi_token');
+        delete api.defaults.headers.common['Authorization'];
+      }
     } finally {
       setLoading(false);
     }
@@ -76,10 +89,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const { user: loggedInUser, token } = res.data.data;
         if (token) {
           localStorage.setItem('flexi_token', token);
+          api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         }
         setUser(loggedInUser);
-        await fetchCurrentUser();
-        return { success: true, message: res.data.message };
+        setLoading(false);
+
+        // Fetch membership and additional metadata in background
+        api.get('/auth/me').then(meRes => {
+          if (meRes.data?.success && meRes.data?.data) {
+            setUser(meRes.data.data.user);
+            setActiveMembership(meRes.data.data.activeMembership || null);
+          }
+        }).catch(() => {});
+
+        return { success: true, message: res.data.message, user: loggedInUser };
       }
       return { success: false, message: res.data?.message || 'Login failed' };
     } catch (err: any) {
@@ -97,9 +120,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const { user: registeredUser, token } = res.data.data;
         if (token) {
           localStorage.setItem('flexi_token', token);
+          api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         }
         setUser(registeredUser);
-        await fetchCurrentUser();
+        setLoading(false);
         return { success: true, message: res.data.message };
       }
       return { success: false, message: res.data?.message || 'Registration failed' };
@@ -118,8 +142,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.error('Logout error:', err);
     } finally {
       localStorage.removeItem('flexi_token');
+      delete api.defaults.headers.common['Authorization'];
       setUser(null);
       setActiveMembership(null);
+      setLoading(false);
     }
   };
 

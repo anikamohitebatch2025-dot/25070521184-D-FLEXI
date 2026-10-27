@@ -132,36 +132,86 @@ The persistence layer (`server/dbStore.ts`) adheres to strict Mongoose document 
 ## 🚀 Running the Project Locally
 
 ### Prerequisites
-- **Node.js** v20.x or v22.x
+- **Node.js** v20.x, v22.x, or v24.x
 - **npm** v10.x or higher
+- **MongoDB** (Local Community Server running on `127.0.0.1:27017` OR MongoDB Atlas cluster)
+- **MongoDB Compass** (for GUI database inspection)
 
-### Option 1: Integrated Dev Server (Default)
-In the project root:
-```bash
-# Install dependencies
-npm install
+---
 
-# Start unified Full-Stack Dev Server (Express + Vite on Port 3000)
-npm run dev
-```
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-### Option 2: Running Client and Server Independently
-
-#### Terminal 1: Backend Server
+### Step 1: Environment Variables Configuration
+In the `server` directory, create or verify `.env`:
 ```bash
 cd server
-npm install
-npm run dev
-# Server runs on port 3000
+cp .env.example .env   # (or on Windows: Copy-Item .env.example .env)
+```
+Default `.env` configuration:
+```env
+PORT=5000
+MONGODB_URI=mongodb://127.0.0.1:27017/gym_management
+JWT_SECRET=flexi-jwt-secret-key-college-project-2026
+NODE_ENV=development
+CLIENT_URL=http://localhost:3000
+```
+> For **MongoDB Atlas**, paste your cluster connection string into `MONGODB_URI`.
+
+---
+
+### Step 2: Install Dependencies
+Run from the root directory:
+```bash
+npm run install:all
+```
+*(Or install inside both directories: `cd server && npm install`, then `cd ../client && npm install`)*
+
+---
+
+### Step 3: MongoDB Verification & Seeding
+To verify database connectivity and run a write/read test:
+```bash
+npm run test:db
+```
+To seed all 17 collections with demo users, plans, and gym assets:
+```bash
+npm run seed
 ```
 
-#### Terminal 2: Frontend Client
+---
+
+### Step 4: Connecting Through MongoDB Compass
+1. Launch **MongoDB Compass** on your computer.
+2. In the "New Connection" screen, enter the Connection String:
+   ```
+   mongodb://127.0.0.1:27017/gym_management
+   ```
+   *(Or your MongoDB Atlas URI)*
+3. Click **Connect**.
+4. You will see the `gym_management` database with collections: `users`, `membershipplans`, `memberships`, `trainers`, `workoutschedules`, `appointments`, `attendances`, `equipment`, `inventories`, etc.
+
+---
+
+### Step 5: Start Backend and Frontend Servers
+
+#### Terminal 1: Backend Server (Port 5000)
 ```bash
-cd client
-npm install
-npm run dev
-# Client runs on Vite development port
+npm run dev:server
+# Or: cd server && npm run dev
+```
+Health Check: Open [http://localhost:5000/api/health](http://localhost:5000/api/health) to inspect backend and MongoDB connection status.
+
+#### Terminal 2: Frontend Client (Port 3000)
+```bash
+npm run dev:client
+# Or: cd client && npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) in your browser. All `/api` requests are automatically proxied to the backend on port 5000.
+
+---
+
+### Step 6: Automated Test Suite Execution
+To execute all 29 automated end-to-end and authentication tests:
+```bash
+npm run test
 ```
 
 ---

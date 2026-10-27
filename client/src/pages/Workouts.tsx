@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   Dumbbell, Flame, HeartPulse, Activity, Target, UserCheck, 
   Clock, Calendar, Users, Filter, CheckCircle2 
@@ -8,8 +9,9 @@ import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 
 export const Workouts: React.FC = () => {
+  const navigate = useNavigate();
   const { user } = useAuth();
-  const { info } = useToast();
+  const { success, info } = useToast();
 
   const [schedules, setSchedules] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -79,7 +81,11 @@ export const Workouts: React.FC = () => {
   }, [selectedType]);
 
   const handleBook = (session: any) => {
-    info(`You are enrolled for ${session.title}! Please arrive 10 minutes before ${session.startTime}.`);
+    if (!user) {
+      navigate('/login?redirect=/workouts');
+      return;
+    }
+    success(`Spot reserved for ${session.title}! Please arrive 10 minutes before ${session.startTime}.`);
   };
 
   return (

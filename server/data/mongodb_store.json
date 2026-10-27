@@ -60,6 +60,36 @@
       "role": "member",
       "createdAt": "2026-10-27T08:18:29.078Z",
       "updatedAt": "2026-10-27T08:18:29.078Z"
+    },
+    {
+      "_id": "6ae0aa1ec2bbf20fdfdd88e1",
+      "name": "Test Athlete",
+      "email": "testathlete_1793108510211@example.com",
+      "password": "$2a$10$f0vH9UBBRWN2d2ugkIelwen4JYtgf5Udq8oLZbYkQqvZU7xZloKT6",
+      "phone": "+1 555-0199",
+      "role": "member",
+      "createdAt": "2026-10-27T13:41:50.417Z",
+      "updatedAt": "2026-10-27T13:41:50.417Z"
+    },
+    {
+      "_id": "6ae0aa6dc77c1b65592c9beb",
+      "name": "Test Athlete",
+      "email": "testathlete_1793108588868@example.com",
+      "password": "$2a$10$ZJ0B9EcL9m.48cfzkb8J3OgsL/pGe45imNKyTFb5Pwdm2w/ChTcpy",
+      "phone": "+1 555-0199",
+      "role": "member",
+      "createdAt": "2026-10-27T13:43:09.151Z",
+      "updatedAt": "2026-10-27T13:43:09.151Z"
+    },
+    {
+      "_id": "6ae0aac947315ab1b175453d",
+      "name": "Test Athlete",
+      "email": "testathlete_1793108681187@example.com",
+      "password": "$2a$10$Cl.k1H5Ge6ahR3RT/wpGr.wy5xJxN36a3bMMG5CAUD0Vfek1jLM2i",
+      "phone": "+1 555-0199",
+      "role": "member",
+      "createdAt": "2026-10-27T13:44:41.439Z",
+      "updatedAt": "2026-10-27T13:44:41.439Z"
     }
   ],
   "plans": [
@@ -128,13 +158,13 @@
     {
       "_id": "65d1d4000000000000000001",
       "userId": "65d1a1000000000000000002",
-      "planId": "65d1b2000000000000000003",
+      "planId": "65d1b2000000000000000001",
       "startDate": "2026-10-12T06:11:18.930Z",
-      "endDate": "2028-04-09T06:11:18.930Z",
+      "endDate": "2028-05-09T06:11:18.930Z",
       "paymentMethod": "Credit Card",
-      "amountPaid": 399,
+      "amountPaid": 49,
       "createdAt": "2026-10-12T06:11:18.930Z",
-      "updatedAt": "2026-10-27T08:18:29.251Z"
+      "updatedAt": "2026-10-27T15:07:58.249Z"
     },
     {
       "_id": "65d1d4000000000000000002",
@@ -340,6 +370,39 @@
       "status": "pending",
       "createdAt": "2026-10-27T06:11:30.088Z",
       "updatedAt": "2026-10-27T06:11:30.088Z"
+    },
+    {
+      "_id": "6ae0aa1fbbfca515ad92b3bb",
+      "name": "Prospect Member",
+      "email": "prospect@gym.com",
+      "phone": "555-1234",
+      "subject": "Trial Pass",
+      "message": "Interested in a trial week.",
+      "status": "pending",
+      "createdAt": "2026-10-27T13:41:51.038Z",
+      "updatedAt": "2026-10-27T13:41:51.038Z"
+    },
+    {
+      "_id": "6ae0aa6d4f2816116175b0a3",
+      "name": "Prospect Member",
+      "email": "prospect@gym.com",
+      "phone": "555-1234",
+      "subject": "Trial Pass",
+      "message": "Interested in a trial week.",
+      "status": "pending",
+      "createdAt": "2026-10-27T13:43:09.745Z",
+      "updatedAt": "2026-10-27T13:43:09.745Z"
+    },
+    {
+      "_id": "6ae0aac9cc943d387826a0d9",
+      "name": "Prospect Member",
+      "email": "prospect@gym.com",
+      "phone": "555-1234",
+      "subject": "Trial Pass",
+      "message": "Interested in a trial week.",
+      "status": "pending",
+      "createdAt": "2026-10-27T13:44:41.937Z",
+      "updatedAt": "2026-10-27T13:44:41.937Z"
     }
   ],
   "appointments": [
@@ -393,6 +456,37 @@
       "status": "pending",
       "createdAt": "2026-10-27T07:37:57.156Z",
       "updatedAt": "2026-10-27T07:37:57.156Z"
+    },
+    {
+      "_id": "6ae0aac9e30d452d67f84e01",
+      "memberName": "Test Athlete",
+      "memberEmail": "testathlete_1793108681187@example.com",
+      "memberPhone": "555-0199",
+      "service": "1-on-1 Fitness Assessment",
+      "trainerName": "Any Available Coach",
+      "date": "2026-11-01",
+      "timeSlot": "10:00 AM",
+      "duration": 60,
+      "notes": "",
+      "status": "confirmed",
+      "createdAt": "2026-10-27T13:44:41.945Z",
+      "updatedAt": "2026-10-27T13:44:41.945Z"
+    },
+    {
+      "_id": "6ae0ba2c0db8ea4835bcc7a8",
+      "memberName": "John Miller",
+      "memberEmail": "john@example.com",
+      "memberPhone": "+1 (555) 349-1120",
+      "service": "1-on-1 Personal Training Session",
+      "trainerId": "65d1c3000000000000000002",
+      "trainerName": "Elena Rostova",
+      "date": "2026-10-27",
+      "timeSlot": "08:30 AM",
+      "duration": 60,
+      "notes": "hwuwuw",
+      "status": "confirmed",
+      "createdAt": "2026-10-27T14:50:20.249Z",
+      "updatedAt": "2026-10-27T14:50:20.249Z"
     }
   ],
   "attendance": [
@@ -644,16 +738,16 @@
       "_id": "65d1dp000000000000000001",
       "userId": "65d1a1000000000000000002",
       "trainerId": "65d1c3000000000000000001",
-      "targetCalories": 2900,
-      "targetProteinG": 210,
-      "targetCarbsG": 340,
-      "targetFatsG": 80,
-      "waterTargetMl": 4200,
-      "waterConsumedMl": 2200,
+      "targetCalories": 2850,
+      "targetProteinG": 195,
+      "targetCarbsG": 320,
+      "targetFatsG": 75,
+      "waterTargetMl": 3800,
+      "waterConsumedMl": 3200,
       "date": "2026-10-27",
       "dietaryPreference": "High Protein",
       "createdAt": "2026-10-12T07:37:57.155Z",
-      "updatedAt": "2026-10-27T08:18:29.251Z",
+      "updatedAt": "2026-10-27T15:07:58.249Z",
       "meals": [
         {
           "id": "meal-1",
@@ -685,7 +779,7 @@
           "proteinG": 32,
           "carbsG": 30,
           "fatsG": 6,
-          "isLogged": false,
+          "isLogged": true,
           "notes": "Pre-workout afternoon fuel."
         },
         {
@@ -698,6 +792,39 @@
           "fatsG": 26,
           "isLogged": false,
           "notes": "Omega-3 fatty acids for muscle recovery."
+        },
+        {
+          "id": "meal-1793112670481",
+          "mealType": "Breakfast",
+          "title": "Anabolic Vanilla Cinnamon French Toast",
+          "calories": 460,
+          "proteinG": 48,
+          "carbsG": 52,
+          "fatsG": 6,
+          "isLogged": true,
+          "notes": "Added from FLEXI Recipe Library (12 min)"
+        },
+        {
+          "id": "meal-1793112678554",
+          "mealType": "Dinner",
+          "title": "Charred Flank Steak & Jasmine Rice Monster Bowl",
+          "calories": 680,
+          "proteinG": 56,
+          "carbsG": 68,
+          "fatsG": 18,
+          "isLogged": true,
+          "notes": "Added from FLEXI Recipe Library (20 min)"
+        },
+        {
+          "id": "meal-1793113650755",
+          "mealType": "Lunch",
+          "title": "Precision Salmon, Quinoa & Avocado Power Bowl",
+          "calories": 620,
+          "proteinG": 45,
+          "carbsG": 48,
+          "fatsG": 26,
+          "isLogged": true,
+          "notes": "Added from FLEXI Recipe Library (18 min)"
         }
       ]
     },
@@ -733,6 +860,31 @@
     }
   ],
   "payments": [
+    {
+      "_id": "6ae0be4e572a44dd4479912d",
+      "userId": "65d1a1000000000000000002",
+      "memberName": "John Miller",
+      "memberEmail": "john@example.com",
+      "planId": "65d1b2000000000000000001",
+      "planName": "Monthly Pass (Upgrade)",
+      "amount": 49,
+      "currency": "USD",
+      "status": "paid",
+      "paymentMethod": "Credit Card",
+      "transactionId": "TXN-UPG-796630",
+      "invoiceNumber": "INV-UPG-998252",
+      "invoiceDate": "2026-10-27",
+      "paidAt": "2026-10-27T15:07:58.249Z",
+      "items": [
+        {
+          "description": "Monthly Pass Upgrade",
+          "amount": 49
+        }
+      ],
+      "subtotal": 49,
+      "taxAmount": 0,
+      "createdAt": "2026-10-27T15:07:58.249Z"
+    },
     {
       "_id": "6ae05f76b90db7c6f8b59be9",
       "userId": "65d1a1000000000000000002",
@@ -1049,6 +1201,18 @@
   ],
   "memberGoals": [
     {
+      "_id": "6ae0be4e4be1ac4cd576d230",
+      "userId": "65d1a1000000000000000002",
+      "title": "Monthly Pass Transformation Program",
+      "category": "Consistency",
+      "currentValue": 1,
+      "targetValue": 30,
+      "unit": "days",
+      "deadline": "2028-05-09",
+      "status": "in_progress",
+      "createdAt": "2026-10-27T15:07:58.249Z"
+    },
+    {
       "_id": "6ae05e55d20285416186f15c",
       "userId": "65d1a1000000000000000002",
       "title": "Quarterly Pro Transformation Program",
@@ -1163,6 +1327,16 @@
     }
   ],
   "notifications": [
+    {
+      "_id": "6ae0be4e5c3717b97f0f1387",
+      "userId": "65d1a1000000000000000002",
+      "title": "⚡ Plan Upgraded!",
+      "message": "You are now on the Monthly Pass tier! Your membership is extended through 9/5/2028.",
+      "type": "payment",
+      "isRead": false,
+      "link": "/dashboard",
+      "createdAt": "2026-10-27T15:07:58.249Z"
+    },
     {
       "_id": "6ae05f76cde0a596f2acace2",
       "userId": "65d1a1000000000000000002",

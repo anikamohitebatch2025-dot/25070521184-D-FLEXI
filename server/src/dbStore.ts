@@ -1,6 +1,13 @@
 import fs from 'fs';
 import path from 'path';
 import bcrypt from 'bcryptjs';
+import mongoose from 'mongoose';
+import {
+  User, MembershipPlan, Membership, Trainer, WorkoutSchedule,
+  Enquiry, Appointment, Attendance, FitnessProgress, WorkoutPlan,
+  DietPlan, Payment, Equipment, Inventory, Feedback,
+  MemberGoal, Challenge, Notification
+} from './models/index.ts';
 
 // Define MongoDB-like document types
 export interface UserDoc {
@@ -1483,7 +1490,105 @@ export class DBStore {
     if (this.initPromise) {
       await this.initPromise;
     }
+
+    // If MongoDB is connected, load live collections from MongoDB
+    if (mongoose.connection.readyState === 1) {
+      try {
+        const [
+          users, plans, memberships, trainers, schedules, enquiries,
+          appointments, attendance, fitnessProgress, workoutPlans,
+          dietPlans, payments, equipment, inventory, feedbacks,
+          memberGoals, challenges, notifications
+        ] = await Promise.all([
+          User.find().lean(),
+          MembershipPlan.find().lean(),
+          Membership.find().lean(),
+          Trainer.find().lean(),
+          WorkoutSchedule.find().lean(),
+          Enquiry.find().lean(),
+          Appointment.find().lean(),
+          Attendance.find().lean(),
+          FitnessProgress.find().lean(),
+          WorkoutPlan.find().lean(),
+          DietPlan.find().lean(),
+          Payment.find().lean(),
+          Equipment.find().lean(),
+          Inventory.find().lean(),
+          Feedback.find().lean(),
+          MemberGoal.find().lean(),
+          Challenge.find().lean(),
+          Notification.find().lean(),
+        ]);
+
+        if (users.length > 0) {
+          this.data = {
+            users: users as any,
+            plans: plans as any,
+            memberships: memberships as any,
+            trainers: trainers as any,
+            schedules: schedules as any,
+            enquiries: enquiries as any,
+            appointments: appointments as any,
+            attendance: attendance as any,
+            fitnessProgress: fitnessProgress as any,
+            workoutPlans: workoutPlans as any,
+            dietPlans: dietPlans as any,
+            payments: payments as any,
+            equipment: equipment as any,
+            inventory: inventory as any,
+            feedbacks: feedbacks as any,
+            memberGoals: memberGoals as any,
+            challenges: challenges as any,
+            notifications: notifications as any,
+          };
+          return this.data;
+        }
+      } catch (err) {
+        console.warn('Live MongoDB query encountered an issue, reading local store:', err);
+      }
+    }
+
     return this.data!;
+  }
+
+  public async syncToMongo(): Promise<void> {
+    if (mongoose.connection.readyState !== 1 || !this.data) return;
+    try {
+      const collections: Array<{ model: any; docs: any[] }> = [
+        { model: User, docs: this.data.users },
+        { model: MembershipPlan, docs: this.data.plans },
+        { model: Membership, docs: this.data.memberships },
+        { model: Trainer, docs: this.data.trainers },
+        { model: WorkoutSchedule, docs: this.data.schedules },
+        { model: Enquiry, docs: this.data.enquiries },
+        { model: Appointment, docs: this.data.appointments },
+        { model: Attendance, docs: this.data.attendance },
+        { model: FitnessProgress, docs: this.data.fitnessProgress },
+        { model: WorkoutPlan, docs: this.data.workoutPlans },
+        { model: DietPlan, docs: this.data.dietPlans },
+        { model: Payment, docs: this.data.payments },
+        { model: Equipment, docs: this.data.equipment },
+        { model: Inventory, docs: this.data.inventory },
+        { model: Feedback, docs: this.data.feedbacks },
+        { model: MemberGoal, docs: this.data.memberGoals },
+        { model: Challenge, docs: this.data.challenges },
+        { model: Notification, docs: this.data.notifications },
+      ];
+
+      for (const { model, docs } of collections) {
+        if (!docs || docs.length === 0) continue;
+        const ops = docs.map(doc => ({
+          replaceOne: {
+            filter: { _id: doc._id },
+            replacement: doc,
+            upsert: true,
+          },
+        }));
+        await model.bulkWrite(ops);
+      }
+    } catch (err: any) {
+      console.error('Failed to sync to MongoDB:', err.message);
+    }
   }
 
   public save(): void {
@@ -1496,11 +1601,47 @@ export class DBStore {
     } catch (err) {
       console.error('Failed to write to DB_FILE:', err);
     }
+
+    // If MongoDB is connected, also sync changes directly to MongoDB
+    if (mongoose.connection.readyState === 1) {
+      this.syncToMongo().catch(err => {
+        console.error('Async sync to MongoDB failed:', err);
+      });
+    }
   }
 
   public async resetToSeed(): Promise<DBData> {
     this.data = await createInitialData();
     this.save();
+
+    if (mongoose.connection.readyState === 1) {
+      try {
+        await Promise.all([
+          User.deleteMany({}),
+          MembershipPlan.deleteMany({}),
+          Membership.deleteMany({}),
+          Trainer.deleteMany({}),
+          WorkoutSchedule.deleteMany({}),
+          Enquiry.deleteMany({}),
+          Appointment.deleteMany({}),
+          Attendance.deleteMany({}),
+          FitnessProgress.deleteMany({}),
+          WorkoutPlan.deleteMany({}),
+          DietPlan.deleteMany({}),
+          Payment.deleteMany({}),
+          Equipment.deleteMany({}),
+          Inventory.deleteMany({}),
+          Feedback.deleteMany({}),
+          MemberGoal.deleteMany({}),
+          Challenge.deleteMany({}),
+          Notification.deleteMany({}),
+        ]);
+        await this.syncToMongo();
+      } catch (err: any) {
+        console.error('Failed to reset MongoDB seeds:', err.message);
+      }
+    }
+
     return this.data;
   }
 }

@@ -1,5 +1,45 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
+
+// Error Boundary to catch render-time crashes and show a useful error instead of black screen
+class DashboardErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { hasError: boolean; error: string }
+> {
+  constructor(props: { children: React.ReactNode }) {
+    super(props);
+    this.state = { hasError: false, error: '' };
+  }
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error: error.message };
+  }
+  componentDidCatch(error: Error, info: React.ErrorInfo) {
+    console.error('[DashboardErrorBoundary] Render error:', error, info);
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-screen bg-[#0b0b0c] flex flex-col items-center justify-center text-white gap-4 px-4">
+          <div className="text-[#ff6a00] text-5xl">⚠️</div>
+          <h2 className="text-2xl font-bold text-[#ff6a00]">Dashboard Error</h2>
+          <p className="text-neutral-400 text-sm max-w-md text-center">
+            Something went wrong loading the dashboard. Please try refreshing the page.
+          </p>
+          <pre className="text-xs text-red-400 bg-neutral-900 rounded p-3 max-w-lg overflow-auto">
+            {this.state.error}
+          </pre>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-2 px-6 py-2.5 rounded-xl bg-[#ff6a00] hover:bg-[#e05500] text-white font-bold text-sm transition-colors"
+          >
+            Reload Page
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ToastProvider } from './context/ToastContext';
 import { CartProvider } from './context/CartContext';
@@ -135,7 +175,7 @@ export default function App() {
 
                 {/* Member Dashboard Guard */}
                 <Route element={<ProtectedMemberRoute />}>
-                  <Route path="/dashboard" element={<MemberDashboard />} />
+                  <Route path="/dashboard" element={<DashboardErrorBoundary><MemberDashboard /></DashboardErrorBoundary>} />
                 </Route>
 
                 {/* Trainer Portal Guard */}

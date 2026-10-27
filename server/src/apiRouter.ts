@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { GoogleGenAI } from '@google/genai';
 import { dbStore, generateObjectId } from './dbStore.ts';
+import { getDbStatus, maskMongoUri, isDbConnected } from './db.ts';
 import type { 
   UserDoc, MembershipDoc, MembershipPlanDoc, TrainerDoc, WorkoutScheduleDoc, 
   EnquiryDoc, AppointmentDoc, AttendanceDoc, FitnessProgressDoc, WorkoutPlanDoc, 
@@ -1781,11 +1782,15 @@ apiRouter.get('/compass/summary', authMiddleware, adminMiddleware, async (_req: 
       { name: 'enquiries', count: db.enquiries.length, indexes: ['_id (primary)', 'status (index)'] },
       { name: 'appointments', count: (db.appointments || []).length, indexes: ['_id (primary)', 'date (index)', 'timeSlot (index)'] },
     ];
+    const dbStatus = getDbStatus();
+    const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/gym_management';
     res.json({
       success: true,
       data: {
-        connectionUri: 'mongodb://127.0.0.1:27017/gym_management',
-        databaseName: 'gym_management',
+        connectionUri: maskMongoUri(uri),
+        databaseName: dbStatus.databaseName,
+        isConnected: dbStatus.isConnected,
+        state: dbStatus.state,
         collections,
       },
     });
