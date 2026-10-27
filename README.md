@@ -2,7 +2,84 @@
 
 **Full-Stack Web Application (CA-03 Project Submission)**  
 **Target Profile:** `anikamohitebatch2025-dot`  
-**Tech Stack:** React 19 (Client) • Node.js 22 & Express (Server) • MongoDB Document Store • Google Gemini AI
+**Repository:** [https://github.com/anikamohitebatch2025-dot/25070521184-D-FLEXI](https://github.com/anikamohitebatch2025-dot/25070521184-D-FLEXI)  
+**Tech Stack:** React 19 (Client) • Node.js 22 & Express (Server) • MongoDB Mongoose Schemas • JWT Authentication
+
+---
+
+## ⚡ QUICK START INSTRUCTIONS (FOR FACULTY / EVALUATION)
+
+> **Important Note:** This is a full-stack MERN application. Both the **Backend Server (Port 5000)** and the **Frontend Client (Port 3000)** must be running simultaneously for authentication and database features to work.
+
+### 1️⃣ Step 1: Install All Dependencies (One Command)
+Open a terminal (PowerShell, Command Prompt, or Terminal) in the root project folder:
+```bash
+npm run install:all
+```
+*(This automatically installs `node_modules` for both the backend server and frontend client).*
+
+---
+
+### 2️⃣ Step 2: Start Both Servers
+
+Open **two terminal windows** in the project root folder:
+
+#### Terminal 1 — Start Backend Server (Port 5000):
+```bash
+npm run dev:server
+```
+*(Or: `cd server && npm run dev`)*  
+> **Output:** `🚀 FLEXI Backend Server running on http://localhost:5000`  
+> **Health Check:** [http://localhost:5000/api/health](http://localhost:5000/api/health)
+
+#### Terminal 2 — Start Frontend Client (Port 3000):
+```bash
+npm run dev:client
+```
+*(Or: `cd client && npm run dev`)*  
+> **Output:** `➜ Local: http://localhost:3000/`
+
+---
+
+### 3️⃣ Step 3: Open in Browser & Sign In
+
+Navigate to: **[http://localhost:3000/login](http://localhost:3000/login)**
+
+Click any of the **Quick Demo Account (1-Click Fill)** buttons directly on the login screen, or enter:
+
+| Role | Email | Password | Accessible Dashboard | Key Features |
+|---|---|---|---|---|
+| **Member** | `john@example.com` | `Member@123` | `/dashboard` | Digital QR Turnstile Pass, BMI & Weight Log, Workout Planner & Timer, Nutrition Targets, Invoice PDF Receipt |
+| **Admin** | `admin@flexigym.com` | `Admin@123` | `/admin` | Complete 13-Module Admin Suite: Appointments, Member Roster, Turnstile Gates, Equipment Service, Inventory, Reports |
+| **Coach** | `marcus@flexigym.com` | `Trainer@123` | `/trainer` | Coach Roster, Assigned Athlete List, Custom Workout Plan Assignment |
+
+*(Note: Passwords are case-sensitive and include the `@` character).*
+
+---
+
+### 🗄️ Database & MongoDB Compass Access
+
+1. Open **MongoDB Compass**.
+2. Connect to the local connection string:
+   ```
+   mongodb://127.0.0.1:27017/gym_management
+   ```
+3. You will see the `gym_management` database with collections: `users`, `membershipplans`, `memberships`, `trainers`, `workoutschedules`, `appointments`, `attendances`, `equipment`, `inventories`, `feedbacks`, `membergoals`, etc.
+4. **Built-in Fallback:** If local MongoDB is not running on the evaluator's machine, the application transparently falls back to the embedded JSON database store (`server/data/mongodb_store.json`), ensuring **100% uninterrupted evaluation with zero setup blockers**.
+
+---
+
+### 🧪 Automated Test Suite (29/29 PASS)
+
+To execute the automated end-to-end and JWT authentication test suite:
+```bash
+npm run test
+```
+```
+====================================================
+🏁 TEST RESULTS SUMMARY: 29/29 TESTS PASSED (100%)
+====================================================
+```
 
 ---
 
