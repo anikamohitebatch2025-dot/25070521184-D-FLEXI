@@ -106,9 +106,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       return { success: false, message: res.data?.message || 'Login failed' };
     } catch (err: any) {
+      const message =
+        err.response?.data?.message ||
+        (!err.response
+          ? 'Cannot reach backend server. Please make sure the backend is running on port 5000 (run `npm run dev:server` or `npm run dev`).'
+          : 'Invalid credentials or server error.');
       return {
         success: false,
-        message: err.response?.data?.message || 'Invalid credentials or server error',
+        message,
       };
     }
   };
@@ -128,9 +133,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       return { success: false, message: res.data?.message || 'Registration failed' };
     } catch (err: any) {
+      const message =
+        err.response?.data?.message ||
+        (!err.response
+          ? 'Cannot reach backend server. Please make sure the backend is running on port 5000 (run `npm run dev:server` or `npm run dev`).'
+          : 'Registration failed. Please check inputs.');
       return {
         success: false,
-        message: err.response?.data?.message || 'Registration failed. Please check inputs.',
+        message,
       };
     }
   };
