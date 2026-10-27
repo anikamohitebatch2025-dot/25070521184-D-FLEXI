@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      // Make window.fetch safely writable/settable for browser extensions & request interceptors
+      (function() {
+        try {
+          if (typeof window !== 'undefined' && window.fetch) {
+            var _nativeFetch = window.fetch.bind(window);
+            Object.defineProperty(window, 'fetch', {
+              get: function() {
+                return _nativeFetch;
+              },
+              set: function(newFetch) {
+                _nativeFetch = newFetch;
+              },
+              configurable: true,
+              enumerable: true,
+            });
+          }
+        } catch (e) {}
+      })();
+
+      // Suppress third-party browser extension content script errors from polluting UI
+      window.addEventListener('error', function(event) {
+        if (event && event.filename && (event.filename.indexOf('chrome-extension://') !== -1 || event.filename.indexOf('moz-extension://') !== -1)) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          return true;
+        }
+        if (event && event.message && event.message.indexOf('Cannot set property fetch') !== -1) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          return true;
+        }
+      }, true);
+    </script>
+    <title>FLEXI - Gym Management System</title>
+    <meta name="description" content="Professional Gym Management System with public portal, member dashboard, and comprehensive admin suite for memberships, trainers, schedules, and enquiries." />
+    <meta property="og:title" content="FLEXI - Gym Management System" />
+    <meta property="og:description" content="Professional Gym Management System with public portal, member dashboard, and comprehensive admin suite for memberships, trainers, schedules, and enquiries." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body class="bg-[#0b0b0c] text-neutral-100 antialiased selection:bg-[#ff6a00] selection:text-white">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
