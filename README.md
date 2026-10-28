@@ -7,6 +7,24 @@
 
 ---
 
+## 🌐 LIVE DEMO (Deployed on Vercel)
+
+> **Live URL:** [https://25070521184-d-flexi.vercel.app](https://25070521184-d-flexi.vercel.app)
+
+The application is deployed and accessible online — no local setup required for evaluation.
+
+**Quick Login Credentials (same as local):**
+
+| Role | Email | Password |
+|---|---|---|
+| **Member** | `john@example.com` | `Member@123` |
+| **Admin** | `admin@flexigym.com` | `Admin@123` |
+| **Coach** | `marcus@flexigym.com` | `Trainer@123` |
+
+> **Note:** The live demo uses an embedded data store. Data resets on each cold start. For persistent MongoDB evaluation, run locally with MongoDB Compass.
+
+---
+
 ## ⚡ QUICK START INSTRUCTIONS (FOR FACULTY / EVALUATION)
 
 > **Important Note:** This is a full-stack MERN application. Both the **Backend Server (Port 5000)** and the **Frontend Client (Port 3000)** must be running simultaneously for authentication and database features to work.

@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import bcrypt from 'bcryptjs';
 import mongoose from 'mongoose';
 import {
@@ -344,8 +345,18 @@ export function generateObjectId(): string {
   return (timestamp + random).substring(0, 24);
 }
 
-const DATA_DIR = path.resolve(process.cwd(), 'data');
-const DB_FILE = path.resolve(DATA_DIR, 'mongodb_store.json');
+// Resolve paths using __dirname so it works both locally (tsx) and on Vercel (serverless)
+const __dbFilename = fileURLToPath(import.meta.url);
+const __dbDirname = path.dirname(__dbFilename);
+
+// Source data directory (relative to this file: server/src/ -> server/data/)
+const SOURCE_DATA_DIR = path.resolve(__dbDirname, '..', 'data');
+const SOURCE_DB_FILE = path.resolve(SOURCE_DATA_DIR, 'mongodb_store.json');
+
+// On Vercel, filesystem is read-only except /tmp — use /tmp for writes
+const isVercel = !!process.env.VERCEL;
+const DATA_DIR = isVercel ? '/tmp' : SOURCE_DATA_DIR;
+const DB_FILE = isVercel ? '/tmp/mongodb_store.json' : SOURCE_DB_FILE;
 
 // Initial seed data generator
 export async function createInitialData(): Promise<DBData> {
@@ -1442,6 +1453,11 @@ export class DBStore {
         fs.mkdirSync(DATA_DIR, { recursive: true });
       }
 
+      // On Vercel cold start: copy bundled source JSON to writable /tmp if not already there
+      if (isVercel && !fs.existsSync(DB_FILE) && fs.existsSync(SOURCE_DB_FILE)) {
+        fs.copyFileSync(SOURCE_DB_FILE, DB_FILE);
+      }
+
       if (fs.existsSync(DB_FILE)) {
         const raw = fs.readFileSync(DB_FILE, 'utf-8');
         const parsed = JSON.parse(raw);
@@ -1577,14 +1593,19 @@ export class DBStore {
 
       for (const { model, docs } of collections) {
         if (!docs || docs.length === 0) continue;
-        const ops = docs.map(doc => ({
-          replaceOne: {
-            filter: { _id: doc._id },
-            replacement: doc,
-            upsert: true,
-          },
-        }));
-        await model.bulkWrite(ops);
+        try {
+          const ops = docs.map(doc => ({
+            replaceOne: {
+              filter: { _id: doc._id },
+              replacement: doc,
+              upsert: true,
+            },
+          }));
+          await model.bulkWrite(ops, { ordered: false });
+        } catch (innerErr: any) {
+          // Log per-collection errors but never crash the server
+          console.warn(`⚠️  Sync warning for ${model.modelName}: ${innerErr.message}`);
+        }
       }
     } catch (err: any) {
       console.error('Failed to sync to MongoDB:', err.message);
